@@ -43,3 +43,43 @@ class Library {
     return this.books.find((book) => book.isbn == isbn);
   }
 }
+
+class Member {
+  constructor(name, takenBooks = []) {
+    this.name = name;
+    this.takenBooks = takenBooks;
+  }
+
+  takeBook(isbn, library) {
+    let checkBook = library.books.find((book) => book.isbn === isbn);
+
+    if (checkBook && checkBook.availableCopies > 0) {
+      checkBook.availableCopies--;
+      this.takenBooks.push(checkBook);
+      console.log(`${checkBook.title} taken successfully.`);
+    } else {
+      console.log("Book is not available.");
+    }
+  }
+
+  returnBook(isbn) {
+    let bookIndex = this.takenBooks.findIndex((book) => book.isbn === isbn);
+
+    if (bookIndex !== -1) {
+      let returnedBook = this.takenBooks.splice(bookIndex, 1)[0];
+      returnedBook.availableCopies++;
+      console.log(`${returnedBook.title} returned successfully.`);
+    } else {
+      console.log("This book is not in your borrowed list.");
+    }
+  }
+
+  getTakenBooks() {
+    if (this.takenBooks.length === 0) {
+      console.log("No books borrowed.");
+    } else {
+      console.log("All taken books:");
+      this.takenBooks.forEach((book) => console.log(book.getBookInfo()));
+    }
+  }
+}
